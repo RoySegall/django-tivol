@@ -1,0 +1,2 @@
+class NotEntryPointClass(Exception):
+    pass
