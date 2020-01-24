@@ -3,10 +3,11 @@ from django.core.management.base import BaseCommand
 from pydoc import locate
 from tivol.Assertions.assertions import NotEntryPointClass
 from tivol.base_classes.entry_point import EntryPoint
+from tivol.management.helpers import SwagHelpers
 
 
-class Command(BaseCommand):
-    help = 'Closes the specified poll for voting'
+class Command(BaseCommand, SwagHelpers):
+    help = 'Migrating data into the system'
 
     def handle(self, *args, **options):
 
@@ -20,3 +21,6 @@ class Command(BaseCommand):
             raise NotEntryPointClass(f'The {settings.TIVOL_ENTRY_POINT} is not an entry point class.')
 
         entry_point: EntryPoint = entry_point()
+
+        self.yellow('Migrating....')
+
