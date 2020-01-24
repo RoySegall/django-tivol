@@ -9,6 +9,7 @@ class EntryPoint(ABC):
 
     def __init__(self):
         self.register_migrations()
+        self.migration_handlers = []
 
     def register_migrations(self):
         """

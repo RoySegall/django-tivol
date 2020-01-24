@@ -3,9 +3,10 @@ from django.core.management.base import BaseCommand
 from pydoc import locate
 from tivol.Assertions.assertions import NotEntryPointClass
 from tivol.base_classes.entry_point import EntryPoint
+from tivol.management.commands.helpers import SwagHelpers
 
 
-class Command(BaseCommand):
+class Command(BaseCommand, SwagHelpers):
     help = 'Closes the specified poll for voting'
 
     def handle(self, *args, **options):
@@ -20,3 +21,15 @@ class Command(BaseCommand):
             raise NotEntryPointClass(f'The {settings.TIVOL_ENTRY_POINT} is not an entry point class.')
 
         entry_point: EntryPoint = entry_point()
+
+        print(entry_point.migration_handlers)
+
+        self.black('a')
+        self.red('a')
+        self.green('a')
+        self.yellow('a')
+        self.blue('a')
+        self.magenta('a')
+        self.cyan('a')
+        self.white('a')
+        self.underline(self.black('foo', True))
