@@ -3,11 +3,11 @@ from django.core.management.base import BaseCommand
 from pydoc import locate
 from tivol.Assertions.assertions import NotEntryPointClass
 from tivol.base_classes.entry_point import EntryPoint
-from tivol.management.commands.helpers import SwagHelpers
+from tivol.management.helpers import SwagHelpers
 
 
 class Command(BaseCommand, SwagHelpers):
-    help = 'Closes the specified poll for voting'
+    help = 'Migrating data into the system'
 
     def handle(self, *args, **options):
 
@@ -22,5 +22,5 @@ class Command(BaseCommand, SwagHelpers):
 
         entry_point: EntryPoint = entry_point()
 
-        self.table(headers=['Migration name', 'Rows inserted'], rows=[['foo', 0]])
+        self.yellow('Migrating....')
 
