@@ -20,8 +20,8 @@ class Command(BaseCommand, SwagHelpers):
         if not issubclass(entry_point_class, EntryPoint):
             raise NotEntryPointClass(f'The {settings.TIVOL_ENTRY_POINT} is not an entry point class.')
 
+        # Init the entry point class and run the migrations.
         entry_point: EntryPoint = entry_point_class()
 
         self.yellow(f'Starting to migrate')
-        entry_point.run_migrate()
-
+        entry_point.run_migration()

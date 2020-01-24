@@ -57,13 +57,43 @@ TIVOL_ENTRY_POINT = 'path.to.the.CustomEntryPoint'
 ```
 
 ## Migrate content
-TBD
+After registering the entry point, we need to introduced our data files
+to the Tivol application. 
 
 ### Register migration handlers
-TBD
+Write here how to add migration handler.
+
+
+```python
+from dummyapp.tivol_migrations.animals_migration import AnimalMigrations
+from tivol.base_classes.entry_point import EntryPoint
+
+
+class CustomEntryPoint(EntryPoint):
+
+    def register_migrations(self):
+        self.add_migration_handler(AnimalMigrations)
+```
 
 ### Write data mappers
-TBD
+Write here how to interact with the mappers and the other elements:
+
+```python
+class AnimalMigrations(MigrationHandlerBase):
+
+    def init_metadata(self):
+        csv_mapper = CsvMapper()
+        csv_mapper.set_destination_file(path=os.path.join(os.getcwd(), 'dummyapp', 'tivol_migrations', 'source_files', 'animals.csv'))
+
+        self.name = 'Animal migration'
+        self.description = 'Migrating animals into the system'
+        self.add_source_mapper(csv_mapper)
+        self.set_model_target(Animal)
+```
 
 ## Tivol CLI commands
-TBD
+
+### Migrate content
+```bash
+python manage.py migrate_content
+```

@@ -40,7 +40,11 @@ class EntryPoint:
         """
         self.migration_handlers.append(handler)
 
-    def run_migrate(self):
+    def run_migration(self):
+        """
+        Running the migration part. This will trigger the migration event for
+        the migration handler which been registered in the entrypoint class.
+        """
         for migration_handler in self.migration_handlers:
             migration = migration_handler()
             migration.migrate()
