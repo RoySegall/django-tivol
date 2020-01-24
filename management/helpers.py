@@ -1,3 +1,6 @@
+from tabulate import tabulate
+
+
 class SwagHelpers:
     def color_text(self, text, color):
         colors = {
@@ -84,3 +87,12 @@ class SwagHelpers:
             return text
 
         print(text)
+
+    def question(self):
+        pass
+
+    def table(self, headers=None, rows=None):
+        print(tabulate(headers=headers, tabular_data=rows, tablefmt='github'))
+
+    def autocomplete(self):
+        pass

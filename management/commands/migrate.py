@@ -22,14 +22,5 @@ class Command(BaseCommand, SwagHelpers):
 
         entry_point: EntryPoint = entry_point()
 
-        print(entry_point.migration_handlers)
+        self.table(headers=['Migration name', 'Rows inserted'], rows=[['foo', 0]])
 
-        self.black('a')
-        self.red('a')
-        self.green('a')
-        self.yellow('a')
-        self.blue('a')
-        self.magenta('a')
-        self.cyan('a')
-        self.white('a')
-        self.underline(self.black('foo', True))
