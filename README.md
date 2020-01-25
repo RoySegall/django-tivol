@@ -88,7 +88,27 @@ handle the data and much more. It's also provides for us `migration life
 cycle hooks` - before content migration, after content migration end 
 much more. We'll discuss it in the future.
 
-### Write data mappers
+### Writing source mapper
+Source mapper is something that take data from one place and then return
+a list dictionaries which then can be inserted to the DB using Django's
+ORM (but this part is not your responsibility). Let's look on the Yaml
+source mapper, since it's the smallest one:
+
+```python
+class YamlMapper(BaseMapper):
+
+    def process_single(self, file):
+        return yaml.load(file, Loader=yaml.FullLoader)
+```
+
+The only logic that relate for processing data from a place and return 
+it is the `process_single` method. That method will be invoke in case of 
+a single file or a directory. No need to worry about how we opened the 
+file, that someone else's problem, just keep in mind that the method 
+receives a file object need to return a list of dictionaries which 
+represent the rows in the file.
+
+### Writing migration handler
 This is where the magic happens. We going to inspect the class we 
 registered as a migration handler. Let's look first on the code:
 
@@ -129,7 +149,56 @@ could get data from the file(s) and insert them to the DB.
 
 The last is the, `self.set_model_target(Animal)` which tells `Tivol` 
 what is the DB model object. Again, don't pass the instantiated object
-but the reference to the object.s   
+but the reference to the object.
+
+### Alter source data
+There are couple of ways to alter source data. But first - why? Well, 
+we can have a lot of reasons: changing a date string to a date object, 
+split a string into a list of other models in the DB and reference it to 
+the DB records which going to be inserted ino the DB. There could be
+various ways:
+
+#### Process plugins
+First, let's look how to register a plugin. We'll take an example of 
+two plugins. In the `init_metadata` method we'll add the next section:
+
+```python
+self.fields_plugins = {
+    'name': [UppercasePlugin],
+    'founded_at': [{'plugin': DatePlugin, 'extra_info': {'format': '%B %d, %Y'}}]
+}
+```
+
+The `fields_plugins` property is a key-value which goes by the rules 
+that the key is the property from the source, and the field in the DB, 
+and the value is a list of plugins which will take the data from the 
+source file and apply logic that transform it to something else.
+
+The value is a list of referenced classes, like the `name` or maybe a 
+list of dictionaries which describe what's the plugin that will be 
+invoke, in this case the `plugin` key in the dictionary, and the 
+`extra_info` is a dictionary which will be passed as dictionary to the
+process method in the plugin which in our case will be the format of the
+string that represent a date.
+
+Now, let's look at a plugin - the date process plugin:
+
+```python
+class DatePlugin(PluginBase):
+    """
+    Getting a string and transform it to a string.
+    """
+
+    def process(self, value, extra_info=None):
+        return datetime.strptime(value, extra_info['format'])
+``` 
+
+The plugin is pretty easy to understand - the `value` argument is the 
+value from the source file and the `extra_info` argument represent a 
+list of values, such as the format date.
+
+#### Migration life cycle hooks
+TBD 
 
 ## Tivol CLI commands
 Let's go over some CLI commands we get out of the box:
