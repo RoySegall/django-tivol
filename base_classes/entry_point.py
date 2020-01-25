@@ -1,15 +1,17 @@
-from abc import ABC
 from tivol.base_classes.migration_handler_base import MigrationHandlerBase
+from typing import List
 
 
-class EntryPoint(ABC):
+class EntryPoint:
     """
     This is the entry point which describes the migration workflow.
     """
 
+    migration_handlers: List[MigrationHandlerBase] = []
+
     def __init__(self):
-        self.register_migrations()
         self.migration_handlers = []
+        self.register_migrations()
 
     def register_migrations(self):
         """
@@ -36,4 +38,13 @@ class EntryPoint(ABC):
 
         :param handler:
         """
-        pass
+        self.migration_handlers.append(handler)
+
+    def run_migration(self):
+        """
+        Running the migration part. This will trigger the migration event for
+        the migration handler which been registered in the entrypoint class.
+        """
+        for migration_handler in self.migration_handlers:
+            migration = migration_handler()
+            migration.migrate()

@@ -16,11 +16,12 @@ class Command(BaseCommand, SwagHelpers):
             # process.
             raise AttributeError('TIVOL_ENTRY_POINT is missing in the settings')
 
-        entry_point = locate(settings.TIVOL_ENTRY_POINT)
-        if not issubclass(entry_point, EntryPoint):
+        entry_point_class = locate(settings.TIVOL_ENTRY_POINT)
+        if not issubclass(entry_point_class, EntryPoint):
             raise NotEntryPointClass(f'The {settings.TIVOL_ENTRY_POINT} is not an entry point class.')
 
-        entry_point: EntryPoint = entry_point()
+        # Init the entry point class and run the migrations.
+        entry_point: EntryPoint = entry_point_class()
 
-        self.yellow('Migrating....')
-
+        self.yellow(f'Starting to migrate')
+        entry_point.run_migration()
