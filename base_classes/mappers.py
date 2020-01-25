@@ -84,12 +84,6 @@ class CsvMapper(BaseMapper):
             row_dictionary = {}
 
             for key, value in zip(headers, row):
-                if key == 'id':
-                    # The id is used for tracking the values form the source
-                    # file so we could later on rollback or maybe update a
-                    # migrated row.
-                    continue
-
                 row_dictionary[key.strip()] = value
 
             results.append(row_dictionary)

@@ -90,8 +90,18 @@ class MigrationHandlerBase(ABC):
 
             # Go over the rows and check if we need to process the value.
             if self.fields_plugins.keys():
+
                 if any({*self.fields_plugins.keys() & {*result.keys()}}):
                     self.prepare_values(result)
+
+                source_id = result['id']
+
+                # Deleting the ID key form the results. The ID help us tracking
+                # if the row has been migrated or not and also help us keep
+                # relationship between migrated content if we desire it.
+                del result['id']
+
+                # todo: track the migrated content and the row from the file.
 
             bulk_objects.append(self.model_target(**result))
 
