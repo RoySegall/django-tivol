@@ -12,12 +12,14 @@ class MigrationHandlerBase(ABC):
     description = ''
     source_mapper = None
     model_target = None
+    fields_plugins = {}
 
     def __init__(self):
         self.name = ''
         self.description = ''
         self.source_mapper = None
         self.model_target = None
+        self.fields_plugins = {}
         self.swag = SwagHelpers()
         self.init_metadata()
 
@@ -45,6 +47,35 @@ class MigrationHandlerBase(ABC):
         """
         self.source_mapper = source_mapper
 
+    def prepare_values(self, row):
+        """
+        Iterate over the row values and apply process plugin logic.
+
+        :param row: The row to process.
+        """
+        for field, plugins_metadata in self.fields_plugins.items():
+
+            for plugin_metadata in plugins_metadata:
+                process_kwargs = {}
+
+                if isinstance(plugin_metadata, dict):
+                    # That's mean that the plugin definition is a dictionary
+                    # with info - which plugin we need to instantiate and what
+                    # the extra info the process method is expecting.
+                    plugin_instance = plugin_metadata['plugin']()
+
+                    process_kwargs['value'] = row[field]
+                    process_kwargs['extra_info'] = plugin_metadata['extra_info']
+                else:
+                    # We found a simple list of process plugin reference.
+                    # We need to instantiate the referenced plugin and pass only
+                    # the value to the process method.
+                    plugin_instance = plugin_metadata()
+                    process_kwargs['value'] = row[field]
+
+                # Take the row and convert it to something else.
+                row[field] = plugin_instance.process(**process_kwargs)
+
     def migrate(self):
         """
         Migrating the parsed data into the DB using Django's ORM.
@@ -56,6 +87,12 @@ class MigrationHandlerBase(ABC):
 
         bulk_objects = []
         for result in results:
+
+            # Go over the rows and check if we need to process the value.
+            if self.fields_plugins.keys():
+                if any({*self.fields_plugins.keys() & {*result.keys()}}):
+                    self.prepare_values(result)
+
             bulk_objects.append(self.model_target(**result))
 
         self.model_target.objects.bulk_create(bulk_objects)

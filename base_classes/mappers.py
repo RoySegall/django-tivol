@@ -1,5 +1,6 @@
 from abc import ABC
 import csv
+import yaml
 
 
 class BaseMapper(ABC):
@@ -97,7 +98,9 @@ class CsvMapper(BaseMapper):
 
 
 class YamlMapper(BaseMapper):
-    pass
+
+    def process_single(self, file):
+        return yaml.load(file, Loader=yaml.FullLoader)
 
 
 class JsonMapper(BaseMapper):
