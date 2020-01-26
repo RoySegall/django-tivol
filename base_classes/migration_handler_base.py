@@ -2,6 +2,7 @@ from abc import ABC
 from django.db.models import Model
 from tivol.base_classes.mappers import BaseMapper
 from tivol.management.helpers import SwagHelpers
+from tivol.models import ContentMigrationStatus
 
 
 class MigrationHandlerBase(ABC):
@@ -80,20 +81,40 @@ class MigrationHandlerBase(ABC):
         """
         Migrating the parsed data into the DB using Django's ORM.
         """
-        self.swag.blue(f'Migrating {self.name}')
-
         # Processing the sources.
         results = self.source_mapper.process()
 
-        bulk_objects = []
+        model_label = self.model_target._meta.label_lower
+        created_items = 0
+        skipped = 0
         for result in results:
 
             # Go over the rows and check if we need to process the value.
             if self.fields_plugins.keys():
+
                 if any({*self.fields_plugins.keys() & {*result.keys()}}):
                     self.prepare_values(result)
 
-            bulk_objects.append(self.model_target(**result))
+            source_id = result['id']
 
-        self.model_target.objects.bulk_create(bulk_objects)
-        self.swag.green(f'{self.name} migration: {len(bulk_objects)} item(s) has been migrated')
+            # Deleting the ID key form the results. The ID help us tracking
+            # if the row has been migrated or not and also help us keep
+            # relationship between migrated content if we desire it.
+            del result['id']
+
+            migrated = ContentMigrationStatus.objects.filter(
+                source_id=source_id, model_target=model_label).exists()
+
+            if migrated:
+                skipped = skipped + 1
+                continue
+
+            entry = self.model_target.objects.create(**result)
+            ContentMigrationStatus.objects.create(
+                source_id=source_id,
+                destination_id=entry.id,
+                model_target=model_label,
+            )
+            created_items = created_items + 1
+
+        self.swag.green(f'{self.name} migration: {created_items} item(s) has been migrated, {skipped} item(s) has been skipped')
