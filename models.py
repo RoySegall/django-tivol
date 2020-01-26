@@ -10,3 +10,6 @@ class ContentMigrationStatus(models.Model):
     source_id = models.CharField(max_length=255)
     destination_id = models.IntegerField()
     model_target = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.model_target.split('.')[1]} - {self.source_id}"
