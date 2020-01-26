@@ -117,4 +117,4 @@ class MigrationHandlerBase(ABC):
             )
             created_items = created_items + 1
 
-        self.swag.green(f'{self.name} migration: {created_items} item(s) has been migrated, {skipped} items has been skipped')
+        self.swag.green(f'{self.name} migration: {created_items} item(s) has been migrated, {skipped} item(s) has been skipped')
