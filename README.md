@@ -93,8 +93,8 @@ much more. We'll discuss it in the future.
 ### How to write a migration source
 Well... there is no actual rule except for one thing: each row, 
 collection of values we want to import, must have an ID. This used for 
-not importing the same data and to have to ability to rollback the 
-migrated from the DB. For more examples - have a look [here](https://github.com/RoySegall/tivol-dummy-app/tree/master/tivol_migrations/source_files)
+not importing the same data twice and to have to ability to rollback the 
+migrated content from the DB. For more examples - have a look [here](https://github.com/RoySegall/tivol-dummy-app/tree/master/tivol_migrations/source_files)
 
 ### Writing source mapper
 Source mapper is something that take data from one place and then return
