@@ -1,8 +1,11 @@
+from tivol.models import ContentMigrationStatus
+from clikit.io import ConsoleIO
 from django.core.management.base import BaseCommand
 from tivol.Assertions.assertions import NotEntryPointClass
 from tivol.base_classes.entry_point import EntryPoint
 from tivol.management.helpers import SwagHelpers
-from tivol.models import ContentMigrationStatus
+from clikit.ui.components import Table
+from clikit.ui.style import TableStyle
 
 
 class Command(BaseCommand, SwagHelpers):
@@ -11,30 +14,20 @@ class Command(BaseCommand, SwagHelpers):
     def handle(self, *args, **options):
         entry_point = self.instance_entrypoint()
 
-        headers = [
-            self.cyan('Migration name', True),
-            self.cyan('Number of items', True),
-            self.cyan('Number of migrated items', True)
-        ]
+        io = ConsoleIO()
+        table = Table(TableStyle.solid())
+        table.set_header_row(['Migration name', 'Number of items', 'Number of migrated items'])
 
-        rows = []
-        i = 0
         for migration_handler in entry_point.migration_handlers:
             handler = migration_handler()
 
-            if i % 2 == 0:
-                printer = self.green
-            else:
-                printer = self.yellow
-
-            rows.append([
-                printer(handler.name, True),
-                printer(self.get_number_of_migrated_items(handler.id), True),
-                printer(self.get_number_of_items_to_migrate(handler.source_mapper), True),
+            table.add_row([
+                handler.name,
+                str(self.get_number_of_migrated_items(handler.id)),
+                str(self.get_number_of_items_to_migrate(handler.source_mapper))
             ])
-            i = i + 1
 
-        self.table(headers=headers, rows=rows)
+        table.render(io)
 
     def get_number_of_migrated_items(self, handler_id):
         """
