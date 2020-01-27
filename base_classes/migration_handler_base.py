@@ -9,6 +9,7 @@ class MigrationHandlerBase(ABC):
     """
     Base migration class.
     """
+    id = None
     name = ''
     description = ''
     source_mapper = None
@@ -103,7 +104,8 @@ class MigrationHandlerBase(ABC):
             del result['id']
 
             migrated = ContentMigrationStatus.objects.filter(
-                source_id=source_id, model_target=model_label).exists()
+                source_id=source_id, model_target=model_label,
+                handler=self.id).exists()
 
             if migrated:
                 skipped = skipped + 1
@@ -114,6 +116,7 @@ class MigrationHandlerBase(ABC):
                 source_id=source_id,
                 destination_id=entry.id,
                 model_target=model_label,
+                handler=self.id
             )
             created_items = created_items + 1
 

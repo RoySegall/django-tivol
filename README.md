@@ -124,6 +124,7 @@ registered as a migration handler. Let's look first on the code:
 class AnimalMigrations(MigrationHandlerBase):
 
     def init_metadata(self):
+        self.id = 'animal'
         self.name = 'Animal migration'
         self.description = 'Migrating animals into the system'
         
@@ -140,10 +141,16 @@ already saw, and there's a couple of code section that we need to
 discuss about:
 
 ```python
+self.id = 'animal'
 self.name = 'Animal migration'
 self.description = 'Migrating animals into the system'
 ```
-In this part we described the migration and what's it going to do.
+In this part we described the migration and what's it going to do. 
+Please notice that's there's an ID property. That property will help us
+track which migration handler migrated which content. You should keep it
+and in plural format. On the other hand... it's really that important so
+you can write there any string you'ld like to(Emoji have not been tested 
+yet)
 
 ```python
 csv_mapper = CsvMapper()
