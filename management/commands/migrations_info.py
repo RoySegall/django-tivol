@@ -1,10 +1,53 @@
 from django.core.management.base import BaseCommand
+from tivol.Assertions.assertions import NotEntryPointClass
+from tivol.base_classes.entry_point import EntryPoint
 from tivol.management.helpers import SwagHelpers
+from tivol.models import ContentMigrationStatus
 
 
 class Command(BaseCommand, SwagHelpers):
     help = 'Migrating data into the system'
 
     def handle(self, *args, **options):
-        self.yellow('Migration info')
+        entry_point = self.instance_entrypoint()
 
+        headers = [
+            self.cyan('Migration name', True),
+            self.cyan('Number of items', True),
+            self.cyan('Number of migrated items', True)
+        ]
+
+        rows = []
+        i = 0
+        for migration_handler in entry_point.migration_handlers:
+            handler = migration_handler()
+
+            if i % 2 == 0:
+                printer = self.green
+            else:
+                printer = self.yellow
+
+            rows.append([
+                printer(handler.name, True),
+                printer(self.get_number_of_migrated_items(handler.id), True),
+                printer(self.get_number_of_items_to_migrate(handler.source_mapper), True),
+            ])
+            i = i + 1
+
+        self.table(headers=headers, rows=rows)
+
+    def get_number_of_migrated_items(self, handler_id):
+        """
+        Get the number of the migrated items.
+
+        :param handler_id: The handler ID of the migration.
+        """
+        return ContentMigrationStatus.objects.filter(handler=handler_id).count()
+
+    def get_number_of_items_to_migrate(self, source_mapper):
+        """
+        Get the number of items left to migrate.
+
+        :param source_mapper: The source mapper of the migration.
+        """
+        return len(source_mapper.process())

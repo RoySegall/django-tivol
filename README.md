@@ -231,6 +231,20 @@ Migrating Animal migration
 Animal migration migration: 7 item(s) has been migrated
 ```
 
+### Get migration information
+You can get information about the migration we have in the system:
+
+```bash
+python3.6 manage.py migrations_info
+```
+
+This will return a table which look like this:
+
+| Migration name    | Number of items   | Number of migrated items  |
+| :-------------    |:-------------     | :-----                    |
+| Animal migration  | 7                 | 7                         |
+| Company migration | 6                 | 5                         |
+
 ## Extra info
 If you want to look at some examples or some blog post look the next 
 list: 
