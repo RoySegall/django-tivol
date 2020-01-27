@@ -1,29 +1,33 @@
-from clikit.io import ConsoleIO
 from django.core.management.base import BaseCommand
+from django.db.models import Model
 from tivol.Assertions.assertions import NotEntryPointClass
 from tivol.base_classes.entry_point import EntryPoint
 from tivol.management.helpers import SwagHelpers
-
-from clikit.ui.components import Table
-from clikit.ui.style import TableStyle
-from clikit.ui.style.alignment import Alignment
+from tivol.models import ContentMigrationStatus
+from django.apps import apps
 
 
 class Command(BaseCommand, SwagHelpers):
     help = 'Rolling back content'
 
     def handle(self, *args, **options):
-        io = ConsoleIO()
-        table = Table(TableStyle.solid())
-        table.set_header_row([self.green("ISBN", True), self.green("Title", True), self.green("Author", True)])
-        table.add_rows(
-            [
-                ["99921-58-10-7", "Divine Comedy", "Dante Alighieri"],
-                ["9971-5-0210-0", "A Tale of Two Cities", "Charles Dickens"],
-                ["960-425-059-0", "The Lord of the Rings", "J. R. R. Tolkien"],
-                ["80-902734-1-6", "And Then There Were None",
-                 "Agatha Christie"],
-            ]
-        )
+        confirmed = self.confirmation_question(self.red("Are you sure you want to remove any migrated data?", True))
 
-        table.render(io)
+        if not confirmed:
+            self.green('Ok, no harm have been done!')
+
+        # todo: allow option to revert specific migrations.
+
+        status_trackers = ContentMigrationStatus.objects.all()
+        bar = self.progress_bar(len(status_trackers))
+
+        self.yellow('Starting to rollback migration. Collecting migrated rows')
+        for migration_status in status_trackers:
+            bar.advance()
+
+            # Get the model object.
+            app, model = migration_status.model_target.split('.')
+            model: Model = apps.get_model(app_label=app, model_name=model)
+            model.objects.filter(pk=migration_status.destination_id).delete()
+            migration_status.delete()
+            self.green(f' Removing {model.__name__}:{migration_status.destination_id}')

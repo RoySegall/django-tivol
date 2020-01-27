@@ -3,6 +3,10 @@ from django.conf import settings
 from pydoc import locate
 from tivol.Assertions.assertions import NotEntryPointClass
 from tivol.base_classes import entry_point
+from clikit.io import ConsoleIO
+from clikit.ui.components import ProgressBar, Question, ConfirmationQuestion, \
+    Table, ChoiceQuestion
+from clikit.ui.style import TableStyle
 
 
 class SwagHelpers:
@@ -92,19 +96,31 @@ class SwagHelpers:
 
         print(text)
 
-    def question(self):
-        pass
+    def confirmation_question(self, question):
+        q = Question(question)
+        cq = ConfirmationQuestion(question=q.question)
+        return cq.ask(self.io())
+
+    def question_with_options(self, question, options, multi=False):
+        q = Question(question)
+        cq = ChoiceQuestion(q.question, options)
+        cq.set_multi_select(multi)
+        return cq.ask(self.io())
 
     def table(self, headers=None, rows=None):
-        print(tabulate(
-            headers=headers,
-            tabular_data=rows,
-            tablefmt='fancy_grid',
-            numalign="left"
-        ))
+        table = Table(TableStyle.solid())
+        table.set_header_row(headers)
+        table.add_rows(rows)
+        table.render(self.io())
 
-    def autocomplete(self):
-        pass
+    def io(self):
+        return ConsoleIO()
+
+    def progress_bar(self, items) -> ProgressBar:
+        bar = ProgressBar(self.io(), items)
+        bar.set_bar_character("■")
+        bar.set_progress_character('')
+        return bar
 
     def instance_entrypoint(self):
         """
