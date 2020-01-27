@@ -226,9 +226,53 @@ python manage.py migrate_content
 
 You'll get something like this:
 ```cli
-Starting to migrate
-Migrating Animal migration
-Animal migration migration: 7 item(s) has been migrated
+Start to migrate
+ 1/2 [■■■■■■■■■■■■■■--------------]  50% Animal migration: 7 migrated, 0 skipped
+ 2/2 [■■■■■■■■■■■■■■■■■■■■■■■■■■■■] 100% Company migration: 5 migrated, 0 skipped
+Migrated
+```
+
+### Get migration information
+You can get information about the migration we have in the system:
+
+```bash
+python3.6 manage.py migrations_info
+```
+
+This will return a table which look like this:
+
+| Migration name    | Number of items   | Number of migrated items  |
+| :-------------    |:-------------     | :-----                    |
+| Animal migration  | 7                 | 7                         |
+| Company migration | 6                 | 5                         |
+
+### Rollback migration
+There's could be a couple of reasons for rolling back the data: someone
+changed the values of the migrated values and things not working 
+properly or just you want to clean you DB from the dummy content.
+
+Type the next command:
+```bash
+python3.6 manage.py migrations_rollback
+```
+
+You'll see a nice progress bar how the procedure going:
+```cli
+Are you sure you want to remove any migrated data? (yes/no) [yes] 
+Starting to rollback migration. Collecting migrated rows
+  1/13 [■■--------------------------]   7% Removing Animal:1
+  2/13 [■■■■------------------------]  15% Removing Animal:2
+  3/13 [■■■■■■----------------------]  23% Removing Animal:3
+  4/13 [■■■■■■■■--------------------]  30% Removing Animal:4
+  5/13 [■■■■■■■■■■------------------]  38% Removing Animal:5
+  6/13 [■■■■■■■■■■■■----------------]  46% Removing Animal:6
+  7/13 [■■■■■■■■■■■■■■■-------------]  53% Removing Animal:7
+  8/13 [■■■■■■■■■■■■■■■■■-----------]  61% Removing Company:1
+  9/13 [■■■■■■■■■■■■■■■■■■■---------]  69% Removing Company:2
+ 10/13 [■■■■■■■■■■■■■■■■■■■■■-------]  76% Removing Company:3
+ 11/13 [■■■■■■■■■■■■■■■■■■■■■■■-----]  84% Removing Company:4
+ 12/13 [■■■■■■■■■■■■■■■■■■■■■■■■■---]  92% Removing Company:5
+ 13/13 [■■■■■■■■■■■■■■■■■■■■■■■■■■■■] 100% Removing Company:6
 ```
 
 ## Extra info

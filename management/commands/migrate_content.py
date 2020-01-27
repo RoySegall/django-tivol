@@ -1,6 +1,5 @@
-from django.conf import settings
+import time
 from django.core.management.base import BaseCommand
-from pydoc import locate
 from tivol.Assertions.assertions import NotEntryPointClass
 from tivol.base_classes.entry_point import EntryPoint
 from tivol.management.helpers import SwagHelpers
@@ -10,18 +9,19 @@ class Command(BaseCommand, SwagHelpers):
     help = 'Migrating data into the system'
 
     def handle(self, *args, **options):
+        # Get the entry point instance.
+        entry_point = self.instance_entrypoint()
 
-        if not hasattr(settings, 'TIVOL_ENTRY_POINT'):
-            # Before we can start process something we need to know what to
-            # process.
-            raise AttributeError('TIVOL_ENTRY_POINT is missing in the settings')
+        bar = self.progress_bar(len(entry_point.migration_handlers))
 
-        entry_point_class = locate(settings.TIVOL_ENTRY_POINT)
-        if not issubclass(entry_point_class, EntryPoint):
-            raise NotEntryPointClass(f'The {settings.TIVOL_ENTRY_POINT} is not an entry point class.')
+        # todo: allow option to revert specific migrations.
 
-        # Init the entry point class and run the migrations.
-        entry_point: EntryPoint = entry_point_class()
+        self.green("Start to migrate")
+        bar.start()
+        for migration_handler in entry_point.migration_handlers:
+            migration = migration_handler()
+            bar.advance()
+            time.sleep(1)
+            self.green(' ' + migration.migrate())
 
-        self.yellow(f'Starting to migrate')
-        entry_point.run_migration()
+        self.green('Migrated')

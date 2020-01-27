@@ -1,4 +1,12 @@
 from tabulate import tabulate
+from django.conf import settings
+from pydoc import locate
+from tivol.Assertions.assertions import NotEntryPointClass
+from tivol.base_classes import entry_point
+from clikit.io import ConsoleIO
+from clikit.ui.components import ProgressBar, Question, ConfirmationQuestion, \
+    Table, ChoiceQuestion
+from clikit.ui.style import TableStyle
 
 
 class SwagHelpers:
@@ -88,11 +96,44 @@ class SwagHelpers:
 
         print(text)
 
-    def question(self):
-        pass
+    def confirmation_question(self, question):
+        q = Question(question)
+        cq = ConfirmationQuestion(question=q.question)
+        return cq.ask(self.io())
+
+    def question_with_options(self, question, options, multi=False):
+        q = Question(question)
+        cq = ChoiceQuestion(q.question, options)
+        cq.set_multi_select(multi)
+        return cq.ask(self.io())
 
     def table(self, headers=None, rows=None):
-        print(tabulate(headers=headers, tabular_data=rows, tablefmt='github'))
+        table = Table(TableStyle.solid())
+        table.set_header_row(headers)
+        table.add_rows(rows)
+        table.render(self.io())
 
-    def autocomplete(self):
-        pass
+    def io(self):
+        return ConsoleIO()
+
+    def progress_bar(self, items) -> ProgressBar:
+        bar = ProgressBar(self.io(), items)
+        bar.set_bar_character("■")
+        bar.set_progress_character('')
+        return bar
+
+    def instance_entrypoint(self):
+        """
+        Get the entry point instance.
+        """
+        if not hasattr(settings, 'TIVOL_ENTRY_POINT'):
+            # Before we can start process something we need to know what to
+            # process.
+            raise AttributeError('TIVOL_ENTRY_POINT is missing in the settings')
+
+        entry_point_class = locate(settings.TIVOL_ENTRY_POINT)
+        if not issubclass(entry_point_class, entry_point.EntryPoint):
+            raise NotEntryPointClass(f'The {settings.TIVOL_ENTRY_POINT} is not an entry point class.')
+
+        # Init the entry point class and run the migrations.
+        return entry_point_class()
