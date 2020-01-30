@@ -8,9 +8,9 @@ class BaseMapper(ABC):
     This is the base mapper class. Any source mapper will need to extend this
     one.
 
-    A source mapper is a small logic unit which read data from a file, or a list
-    of files(depends on the logic we want to implement), and parse the data into
-    data which can be handled by Django's ORM.
+    A source mapper is a small logic unit which read data from a file, or a
+    list of files(depends on the logic we want to implement), and parse the
+    data into data which can be handled by Django's ORM.
     """
     source_path = None
     source_type = None

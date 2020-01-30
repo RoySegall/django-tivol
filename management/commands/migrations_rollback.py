@@ -11,7 +11,8 @@ class Command(BaseCommand, SwagHelpers):
     help = 'Rolling back content'
 
     def handle(self, *args, **options):
-        confirmed = self.confirmation_question(self.red("Are you sure you want to remove any migrated data?", True))
+        confirm = "Are you sure you want to remove any migrated data?"
+        confirmed = self.confirmation_question(self.red(confirm, True))
 
         if not confirmed:
             self.green('Ok, no harm have been done!')
@@ -30,4 +31,8 @@ class Command(BaseCommand, SwagHelpers):
             model: Model = apps.get_model(app_label=app, model_name=model)
             model.objects.filter(pk=migration_status.destination_id).delete()
             migration_status.delete()
-            self.green(f' Removing {model.__name__}:{migration_status.destination_id}')
+
+            name = model.__name__
+            destination = migration_status.destination_id
+
+            self.green(f' Removing {name}:{destination}')

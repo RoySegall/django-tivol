@@ -1,7 +1,7 @@
 from tabulate import tabulate
 from django.conf import settings
 from pydoc import locate
-from tivol.Assertions.assertions import NotEntryPointClass
+from tivol.Assertions.assertions import NotEntryPointClass, EntryPointIsMissing
 from tivol.base_classes import entry_point
 from clikit.io import ConsoleIO
 from clikit.ui.components import ProgressBar, Question, ConfirmationQuestion, \
@@ -129,11 +129,11 @@ class SwagHelpers:
         if not hasattr(settings, 'TIVOL_ENTRY_POINT'):
             # Before we can start process something we need to know what to
             # process.
-            raise AttributeError('TIVOL_ENTRY_POINT is missing in the settings')
+            raise EntryPointIsMissing()
 
         entry_point_class = locate(settings.TIVOL_ENTRY_POINT)
         if not issubclass(entry_point_class, entry_point.EntryPoint):
-            raise NotEntryPointClass(f'The {settings.TIVOL_ENTRY_POINT} is not an entry point class.')
+            raise NotEntryPointClass()
 
         # Init the entry point class and run the migrations.
         return entry_point_class()

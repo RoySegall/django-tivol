@@ -22,7 +22,11 @@ class Command(BaseCommand, SwagHelpers):
             ])
 
         self.table(
-            headers=['Migration name', 'Number of items', 'Number of migrated items'],
+            headers=[
+                'Migration name',
+                'Number of items',
+                'Number of migrated items'
+            ],
             rows=rows
         )
 
@@ -32,7 +36,9 @@ class Command(BaseCommand, SwagHelpers):
 
         :param handler_id: The handler ID of the migration.
         """
-        return ContentMigrationStatus.objects.filter(handler=handler_id).count()
+        return ContentMigrationStatus\
+            .objects\
+            .filter(handler=handler_id).count()
 
     def get_number_of_items_to_migrate(self, source_mapper):
         """

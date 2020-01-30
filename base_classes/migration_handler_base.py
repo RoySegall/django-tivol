@@ -66,12 +66,14 @@ class MigrationHandlerBase(ABC):
                     # the extra info the process method is expecting.
                     plugin_instance = plugin_metadata['plugin']()
 
-                    process_kwargs['value'] = row[field]
-                    process_kwargs['extra_info'] = plugin_metadata['extra_info']
+                    process_kwargs.update(
+                        value=row[field],
+                        extra_info=plugin_metadata['extra_info']
+                    )
                 else:
                     # We found a simple list of process plugin reference.
-                    # We need to instantiate the referenced plugin and pass only
-                    # the value to the process method.
+                    # We need to instantiate the referenced plugin and pass
+                    # only the value to the process method.
                     plugin_instance = plugin_metadata()
                     process_kwargs['value'] = row[field]
 
