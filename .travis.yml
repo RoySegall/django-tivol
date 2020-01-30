@@ -1,0 +1,22 @@
+language: python
+python:
+  - "3.8"
+  - "3.7"
+  - "3.6"
+  - "3.5"
+
+env:
+  - SCRIPT=travis/python-linter.sh
+    INSTALL=travis/python-setup.sh
+
+  - SCRIPT=travis/python-unitest.sh
+    INSTALL=travis/python-setup.sh
+
+services:
+  - mysql
+
+before_script:
+  - bash $INSTALL
+
+script:
+  - bash $SCRIPT
