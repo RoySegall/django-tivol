@@ -1,34 +1,21 @@
 language: python
 python:
   - "3.8"
-#  - "3.7"
-#  - "3.6"
-#  - "3.5"
-
-#env:
-#  - INSTALL=travis/python-setup.sh
-#    SCRIPT=travis/python-linter.sh
-#
-#  - INSTALL=travis/python-setup.sh
-#    SCRIPT=travis/python-unitest.sh
-
-#  -DJANGO=1.8 DB=mysql
+  - "3.7"
+  - "3.6"
 
 env:
-#    - DJANGO=1.8.13
-#    - DJANGO=1.9.6
-#    - DJANGO=1.10.8
-#    - DJANGO=1.11.16
-#    - DJANGO=2.0.9
-    - DJANGO=2.2.0
+  - INSTALL=travis/linter-setup.sh
+    SCRIPT=travis/linter-run.sh
+
+  - INSTALL=travis/tox-run.sh
+    SCRIPT=travis/tox-setup.sh
 
 services:
   - mysql
 
-#before_script:
-#  - bash $INSTALL
+before_script:
+  - bash $INSTALL
 
 script:
-#  - bash $SCRIPT
-  - ls -al
-  - python manage.py test
+  - bash $SCRIPT
