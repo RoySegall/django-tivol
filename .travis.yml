@@ -8,8 +8,8 @@ env:
   - INSTALL=travis/linter-setup.sh
     SCRIPT=travis/linter-run.sh
 
-  - INSTALL=travis/tox-run.sh
-    SCRIPT=travis/tox-setup.sh
+  - INSTALL=travis/tox-setup.sh
+    SCRIPT=travis/tox-run.sh
 
 services:
   - mysql
