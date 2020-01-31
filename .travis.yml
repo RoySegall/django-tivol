@@ -6,11 +6,11 @@ python:
 #  - "3.5"
 
 env:
-  - INSTALL=travis/python-setup.sh
-    SCRIPT=travis/python-linter.sh
-
-  - INSTALL=travis/python-setup.sh
-    SCRIPT=travis/python-unitest.sh
+#  - INSTALL=travis/python-setup.sh
+#    SCRIPT=travis/python-linter.sh
+#
+#  - INSTALL=travis/python-setup.sh
+#    SCRIPT=travis/python-unitest.sh
 
   -DJANGO=1.8 DB=mysql
 
