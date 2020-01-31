@@ -17,8 +17,8 @@ env:
 services:
   - mysql
 
-before_script:
-  - bash $INSTALL
+#before_script:
+#  - bash $INSTALL
 
 script:
 #  - bash $SCRIPT
