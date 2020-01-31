@@ -1,4 +1,3 @@
-from tabulate import tabulate
 from django.conf import settings
 from pydoc import locate
 from tivol.Assertions.assertions import NotEntryPointClass, EntryPointIsMissing
