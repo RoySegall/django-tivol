@@ -7,7 +7,10 @@ class AnimalMigration(MigrationHandlerBase):
 
     def init_metadata(self):
         csv_mapper = CsvMapper()
-        csv_mapper.set_destination_file(path=os.path.join(os.getcwd(), 'dummyapp', 'tivol_migrations', 'source_files', 'animals.csv'))
+        path = os.path.join(
+            os.getcwd(), 'tivol', 'tests', 'assets', 'animals.csv'
+        )
+        csv_mapper.set_destination_file(path=path)
 
         self.id = 'animal'
         self.name = 'Animal migration'
