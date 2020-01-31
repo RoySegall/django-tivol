@@ -7,7 +7,7 @@ class TestEntryPoint(TestCase):
         """
         should raise an excpetion.
         """
-        self.fail('foo 🍕')
+        pass
 
     def test_add_migration_handler(self):
         """

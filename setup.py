@@ -6,12 +6,12 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name="tivol",
     version="0.0.1",
-    author="Example Author",
-    author_email="author@example.com",
-    description="A small example package",
+    author="Roy Segall",
+    author_email="roy@segall.io",
+    description="Migrating content into Django based sites",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/pypa/sampleproject",
+    url="https://github.com/RoySegall/tivol",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
