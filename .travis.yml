@@ -5,14 +5,22 @@ python:
 #  - "3.6"
 #  - "3.5"
 
-env:
+#env:
 #  - INSTALL=travis/python-setup.sh
 #    SCRIPT=travis/python-linter.sh
 #
 #  - INSTALL=travis/python-setup.sh
 #    SCRIPT=travis/python-unitest.sh
 
-  -DJANGO=1.8 DB=mysql
+#  -DJANGO=1.8 DB=mysql
+
+env:
+#    - DJANGO=1.8.13
+#    - DJANGO=1.9.6
+#    - DJANGO=1.10.8
+#    - DJANGO=1.11.16
+#    - DJANGO=2.0.9
+    - DJANGO=2.2.0
 
 services:
   - mysql
@@ -21,5 +29,6 @@ services:
 #  - bash $INSTALL
 
 script:
+#  - bash $SCRIPT
   - ls -al
-#  - python manage.py test
+  - python manage.py test
