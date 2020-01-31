@@ -22,4 +22,5 @@ services:
 
 script:
 #  - bash $SCRIPT
+  -ls -al
   - python manage.py test
