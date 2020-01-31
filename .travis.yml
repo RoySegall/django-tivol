@@ -21,6 +21,5 @@ services:
 #  - bash $INSTALL
 
 script:
-#  - bash $SCRIPT
-  -ls -al
-  - python manage.py test
+  - ls -al
+#  - python manage.py test
