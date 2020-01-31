@@ -1,7 +1,7 @@
 from tivol.Assertions.assertions import MigrationsNotRegistered
 from tivol.base_classes.migration_handler_base import MigrationHandlerBase
 from typing import List
-import django
+
 
 class EntryPoint:
     """

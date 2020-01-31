@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-pycodestyle  . --exclude=settings.py,migrations
+pycodestyle  . --exclude=settings.py,migrations,*tox
