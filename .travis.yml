@@ -12,6 +12,8 @@ env:
   - INSTALL=travis/python-setup.sh
     SCRIPT=travis/python-unitest.sh
 
+  -DJANGO=1.8 DB=mysql
+
 services:
   - mysql
 
@@ -19,4 +21,5 @@ before_script:
   - bash $INSTALL
 
 script:
-  - bash $SCRIPT
+#  - bash $SCRIPT
+  - python manage.py test
