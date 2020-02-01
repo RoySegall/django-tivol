@@ -7,7 +7,6 @@ from tivol.models import ContentMigrationStatus
 from django.apps import apps
 
 
-
 class Command(BaseCommand, SwagHelpers):
     help = 'Rolling back content'
 

@@ -1,4 +1,7 @@
 # Tivol
+
+[![Build Status](https://travis-ci.org/RoySegall/tivol.svg?branch=master)](https://travis-ci.org/RoySegall/tivol)
+
 Welcome to `Tivol`. You probably wonder to your self "what's this Django
 app do?". Let's start with a scenario: you created your Django site, or
 a backend with REST framework and you start to insert data which you
@@ -24,7 +27,7 @@ installed app list:
 ```
 INSTALLED_APPS = [
     ...
-    'tivol.apps.TivolConfig',
+    'tivol',
 ]
 ```
 

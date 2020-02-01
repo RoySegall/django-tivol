@@ -25,6 +25,6 @@ class TestEntryPoint(TestCase):
         Testing the migration handler are being added to the objects.
         """
         valid_entry_point = EntryPointForTests()
-        self.assertEquals(
+        self.assertEqual(
             valid_entry_point.migration_handlers, [AnimalMigration]
         )
