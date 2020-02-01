@@ -36,8 +36,8 @@ class TestMappers(TestCase):
 
         :param file: The file to parse from the assets folder.
         :param mapper: The mapper to handle the file.
-        :param key: Key to return. Default is 0. If set None will return all the
-            object.
+        :param key: Key to return. Default is 0. If set None will return all
+            the object.
 
         :return: Parsed content.
         """

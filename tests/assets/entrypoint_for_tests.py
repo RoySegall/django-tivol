@@ -16,4 +16,3 @@ class EntryPointForTests(EntryPoint):
 
     def register_migrations(self):
         self.add_migration_handler(AnimalMigration)
-
