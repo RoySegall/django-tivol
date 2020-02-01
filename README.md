@@ -215,6 +215,39 @@ The plugin is pretty easy to understand - the `value` argument is the
 value from the source file and the `extra_info` argument represent a
 list of values, such as the format date.
 
+### Database migration
+
+Set the next connections in the `settings.py`:
+
+```
+DATABASES = {
+    'default': {
+        # ...
+    },
+    'other_site': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'django_migration',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    }
+}
+```
+
+For this example I've set up another DB and notified Django about the
+other DB. The mapper configuration in the migration handler should
+look like this:
+
+```pyton
+        mysql_mapper = SqlMapper()
+        mysql_mapper.set_connection('other_site')
+        mysql_mapper.set_table('tags')
+```
+
+The mapper need to know which DB connection it should use and which
+table holds the data.
+
 #### Migration life cycle hooks
 TBD
 
