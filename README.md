@@ -217,15 +217,15 @@ list of values, such as the format date.
 
 ### Database migration
 
-We can pull data from other databases. for now MySql but more will be
-available in the future. Migrations which relied on data from files are
+We can pull data from other databases. For now, MySQL but more will be
+available in the future. Migrations which relies on data from files are
 pretty easy to set up - tell the mapper where the file store and the
-mapper will do the have lifting. But how data from other databases can
-be pull easily without a lot of hustle? Well, Django already has a nice
-DB layer which we can use. Let's see how this will work.
+mapper will do the heavy lifting. But how data from other databases can
+be migrated easily without a lot of hustle? Well, Django already has a
+nice DB layer which we can use. Let's see how this will work.
 
-First, we need set the DB connection. In you `settings.py`, or
-`local_settings.py`, you'll need to connections to the DB. Django's
+First, we need set the DB connection. In your `settings.py`, or
+`local_settings.py`, you'll need to add connections to the DB. Django's
 documentation has a lot of information for that but you can have a look
 on the next example:
 
@@ -245,9 +245,8 @@ DATABASES = {
 }
 ```
 
-After we set up the connection, let's see how to connect the mapper. in
+After we set up the connection, let's see how to connect the mapper. In
 the `init_metadata` method we need to configure the mapper like this:
-
 
 ```pyton
         mysql_mapper = SqlMapper()
