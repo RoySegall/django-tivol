@@ -12,6 +12,3 @@ class MigrationsNotRegistered(Exception):
 
 class NoModelTarget(Exception):
     pass
-
-class Foo(Exception):
-    pass

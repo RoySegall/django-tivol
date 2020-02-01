@@ -78,4 +78,4 @@ class TestMappers(TestCase):
             'founded_by': 'Steve Jobs, Steve Wozniak, Ronald Wayne'
         }
         self.assertEqual(self.parse_file('companies.yml', YamlMapper()),
-                          first_row)
+                         first_row)
