@@ -12,3 +12,11 @@ class MigrationsNotRegistered(Exception):
 
 class NoModelTarget(Exception):
     pass
+
+
+class OtherConnectionNotSet(Exception):
+    pass
+
+
+class SourceTableNotSet(Exception):
+    pass

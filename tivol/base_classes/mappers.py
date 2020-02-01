@@ -2,6 +2,9 @@ import json
 from abc import ABC
 import csv
 import yaml
+from django.db import connection, connections
+from tivol.Assertions.assertions import OtherConnectionNotSet, \
+    SourceTableNotSet
 
 
 class BaseMapper(ABC):
@@ -105,12 +108,51 @@ class JsonMapper(BaseMapper):
         return json.load(file)
 
 
-class ExcelMapper(BaseMapper):
-    pass
-
-
 class SqlMapper(BaseMapper):
-    pass
+
+    connection = None
+    table = None
+
+    def __init__(self):
+        super().__init__()
+        self.connection = None
+        self.table = None
+
+    def set_connection(self, connection_name):
+        """
+        Connecting to other database using Django's database layer. After
+        defining another connection in the settings this mehod will tell the
+        mapper which connection it should use.
+
+        :param connection_name: The connection name.
+        """
+        self.connection = connection_name
+        return self
+
+    def set_table(self, table_name):
+        """
+        The table name to pull data from.
+        """
+        self.table = table_name
+        return self
+
+    def process(self):
+        if not self.connection:
+            raise OtherConnectionNotSet()
+
+        if not self.table:
+            raise SourceTableNotSet()
+
+        with connections[self.connection].cursor() as cursor:
+            cursor.execute(f"SELECT * FROM {self.table}")
+
+            columns = [column[0] for column in cursor.description]
+
+            results = []
+            for row in cursor.fetchall():
+                results.append(dict(zip(columns, row)))
+
+        return results
 
 
 class RestMapper(BaseMapper):
@@ -120,6 +162,3 @@ class RestMapper(BaseMapper):
 class GraphqlMapper(BaseMapper):
     pass
 
-
-class PickleMapper(BaseMapper):
-    pass
