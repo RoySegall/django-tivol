@@ -15,7 +15,7 @@ class TestEntryPoint(TestCase):
         should raise an exception.
         """
         try:
-            foo = FailingEntryPointForTests()
+            FailingEntryPointForTests()
             self.fail()
         except MigrationsNotRegistered as e:
             pass

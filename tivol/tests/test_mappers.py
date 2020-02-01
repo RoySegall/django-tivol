@@ -1,5 +1,5 @@
 from django.test import TestCase
-from tivol.base_classes.mappers import CsvMapper, YamlMapper
+from tivol.base_classes.mappers import CsvMapper, YamlMapper, JsonMapper
 from tivol.tests.assets.mappers_for_tests import DummyMapper
 import os
 
@@ -78,4 +78,16 @@ class TestMappers(TestCase):
             'founded_by': 'Steve Jobs, Steve Wozniak, Ronald Wayne'
         }
         self.assertEqual(self.parse_file('companies.yml', YamlMapper()),
+                         first_row)
+
+    def test_json_parser(self):
+        """
+        Testing the yaml file parsing.
+        """
+        first_row = {
+            'birth_date': 'June 1, 1937',
+            'id': 'actor_1',
+            'name': 'Morgan Freeman'
+        }
+        self.assertEqual(self.parse_file('actors.json', JsonMapper()),
                          first_row)
