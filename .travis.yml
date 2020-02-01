@@ -1,13 +1,21 @@
 language: python
 python:
-  - "2.7"
-  - "3.4"
-install:
-  - "pip install coveralls"
-  - "pip install -e .[test]"
-script: 
-  - py.test
-  - coverage run --source=pyskel -m py.test
-after_success:
-  - coveralls
-sudo: false
+  - "3.8"
+  - "3.7"
+  - "3.6"
+
+env:
+  - INSTALL=travis/linter-setup.sh
+    SCRIPT=travis/linter-run.sh
+
+  - INSTALL=travis/tox-setup.sh
+    SCRIPT=travis/tox-run.sh
+
+services:
+  - mysql
+
+before_script:
+  - bash $INSTALL
+
+script:
+  - bash $SCRIPT
