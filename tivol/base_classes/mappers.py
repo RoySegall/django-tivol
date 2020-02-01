@@ -161,4 +161,3 @@ class RestMapper(BaseMapper):
 
 class GraphqlMapper(BaseMapper):
     pass
-

@@ -91,3 +91,10 @@ class TestMappers(TestCase):
         }
         self.assertEqual(self.parse_file('actors.json', JsonMapper()),
                          first_row)
+
+    def test_sql_parser(self):
+        """
+        Testing the SQL parser.
+        """
+        # todo: check how to mock the SQL layer fnctionnallity.
+        self.fail('Not ready yet. ')
