@@ -16,8 +16,8 @@ class TestMappers(TestCase):
         dummy_mapper = DummyMapper()
         dummy_mapper.set_destination_file('foo')
 
-        self.assertEquals(dummy_mapper.source_type, 'file')
-        self.assertEquals(dummy_mapper.source_path, 'foo')
+        self.assertEqual(dummy_mapper.source_type, 'file')
+        self.assertEqual(dummy_mapper.source_path, 'foo')
 
     def test_set_destination_folder(self):
         """
@@ -27,8 +27,8 @@ class TestMappers(TestCase):
         dummy_mapper = DummyMapper()
         dummy_mapper.set_destination_folder('foo')
 
-        self.assertEquals(dummy_mapper.source_type, 'folder')
-        self.assertEquals(dummy_mapper.source_path, 'foo')
+        self.assertEqual(dummy_mapper.source_type, 'folder')
+        self.assertEqual(dummy_mapper.source_path, 'foo')
 
     def parse_file(self, file, mapper, key=0):
         """
@@ -56,7 +56,7 @@ class TestMappers(TestCase):
         """
         Testing the CSV file parser.
         """
-        self.assertEquals(
+        self.assertEqual(
             self.parse_file('animals.csv', CsvMapper()),
             {
                 'id': 'animal_1',
@@ -77,5 +77,5 @@ class TestMappers(TestCase):
             'founded_at': 'April 1, 1976',
             'founded_by': 'Steve Jobs, Steve Wozniak, Ronald Wayne'
         }
-        self.assertEquals(self.parse_file('companies.yml', YamlMapper()),
+        self.assertEqual(self.parse_file('companies.yml', YamlMapper()),
                           first_row)

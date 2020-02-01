@@ -3,8 +3,23 @@ from tivol.Assertions.assertions import NoModelTarget
 from tivol.base_classes.mappers import CsvMapper
 from tivol.base_classes.plugins import UppercasePlugin
 from tivol.tests.assets.migration_handlers import AnimalMigration
-from .models import Animal
 from django.db import connection
+
+from django.db import models
+from django.db.models import CharField, IntegerField, DateTimeField
+
+
+class Animal(models.Model):
+    animal_name = CharField(max_length=25)
+    sound = CharField(max_length=25)
+    number_of_legs = IntegerField()
+
+    def __str__(self):
+        return self.animal_name
+
+    class Meta:
+        # This model is not managed by Django
+        managed = False
 
 
 class TestMigrationHandlerBase(TransactionTestCase):
@@ -36,7 +51,7 @@ class TestMigrationHandlerBase(TransactionTestCase):
         Testing setting the model target.
         """
         self.migration.set_model_target(Animal)
-        self.assertEquals(self.migration.model_target, Animal)
+        self.assertEqual(self.migration.model_target, Animal)
 
     def test_add_source_mapper(self):
         """
@@ -62,10 +77,10 @@ class TestMigrationHandlerBase(TransactionTestCase):
             self.migration.prepare_values({'name': 'foo'})
             self.fail('Our process function has not been invoked')
         except AssertionError as e:
-            self.assertEquals(str(e), 'Raising so we could catch it')
+            self.assertEqual(str(e), 'Raising so we could catch it')
 
     def test_migrate(self):
-        self.assertEquals(0, Animal.objects.count())
+        self.assertEqual(0, Animal.objects.count())
         try:
             self.migration.migrate()
             self.fail()
@@ -74,5 +89,5 @@ class TestMigrationHandlerBase(TransactionTestCase):
 
         self.migration.set_model_target(Animal)
         self.migration.migrate()
-        self.assertEquals(7, Animal.objects.count())
+        self.assertEqual(7, Animal.objects.count())
         Animal.objects.get(animal_name='Cat')

@@ -24,7 +24,7 @@ installed app list:
 ```
 INSTALLED_APPS = [
     ...
-    'tivol.apps.TivolConfig',
+    'tivol',
 ]
 ```
 
