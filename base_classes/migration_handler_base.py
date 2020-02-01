@@ -1,5 +1,7 @@
 from abc import ABC
 from django.db.models import Model
+
+from tivol.Assertions.assertions import NoModelTarget
 from tivol.base_classes.mappers import BaseMapper
 from tivol.management.helpers import SwagHelpers
 from tivol.models import ContentMigrationStatus
@@ -86,6 +88,9 @@ class MigrationHandlerBase(ABC):
         """
         # Processing the sources.
         results = self.source_mapper.process()
+
+        if not self.model_target:
+            raise NoModelTarget()
 
         model_label = self.model_target._meta.label_lower
         created_items = 0

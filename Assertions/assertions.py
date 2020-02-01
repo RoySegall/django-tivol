@@ -8,3 +8,7 @@ class EntryPointIsMissing(Exception):
 
 class MigrationsNotRegistered(Exception):
     pass
+
+
+class NoModelTarget(Exception):
+    pass

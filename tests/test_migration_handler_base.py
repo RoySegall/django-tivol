@@ -1,4 +1,7 @@
 from django.test import TransactionTestCase
+from tivol.Assertions.assertions import NoModelTarget
+from tivol.base_classes.mappers import CsvMapper
+from tivol.base_classes.plugins import UppercasePlugin
 from tivol.tests.assets.migration_handlers import AnimalMigration
 from .models import Animal
 from django.db import connection
@@ -10,26 +13,66 @@ class TestMigrationHandlerBase(TransactionTestCase):
     """
 
     def setUp(self):
+        """
+        Creating all the custom schema which relate to test.
+        """
         super().setUp()
         with connection.schema_editor() as schema_editor:
             schema_editor.create_model(Animal)
 
+        self.migration = AnimalMigration()
+
     def tearDown(self):
+        """
+        Deleting all the custom schema which relate to test.
+        """
         super().tearDown()
 
         with connection.schema_editor() as schema_editor:
             schema_editor.delete_model(Animal)
 
     def test_set_model_target(self):
-        animal_migration = AnimalMigration()
-        animal_migration.set_model_target(Animal)
-        self.assertEquals(animal_migration.model_target, Animal)
+        """
+        Testing setting the model target.
+        """
+        self.migration.set_model_target(Animal)
+        self.assertEquals(self.migration.model_target, Animal)
 
     def test_add_source_mapper(self):
-        pass
+        """
+        Testing setting the model target.
+        """
+        self.assertIsInstance(self.migration.source_mapper, CsvMapper)
 
     def test_prepare_values(self):
-        pass
+        """
+        Testing the prepare values method.
+        """
+
+        class UppercasePluginDummy(UppercasePlugin):
+
+            def process(self, value, extra_info=None):
+                raise AssertionError('Raising so we could catch it')
+
+        self.migration.fields_plugins = {
+            'name': [UppercasePluginDummy],
+        }
+
+        try:
+            self.migration.prepare_values({'name': 'foo'})
+            self.fail('Our process function has not been invoked')
+        except AssertionError as e:
+            self.assertEquals(str(e), 'Raising so we could catch it')
 
     def test_migrate(self):
-        pass
+        self.assertEquals(0, Animal.objects.count())
+        try:
+            self.migration.migrate()
+            self.fail()
+        except NoModelTarget as e:
+            pass
+
+        self.migration.set_model_target(Animal)
+        self.migration.migrate()
+        self.assertEquals(7, Animal.objects.count())
+        Animal.objects.get(animal_name='Cat')
