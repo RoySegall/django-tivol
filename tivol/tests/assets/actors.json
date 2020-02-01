@@ -1,0 +1,32 @@
+[
+    {
+        "id": "actor_1",
+        "name": "Morgan Freeman",
+        "birth_date": "June 1, 1937"
+    },
+    {
+        "id": "actor_2",
+        "name": "Leonardo DiCaprio",
+        "birth_date": "November 11, 1974"
+    },
+    {
+        "id": "actor_3",
+        "name": "Brad Pitt",
+        "birth_date": "December 18, 1963"
+    },
+    {
+        "id": "actor_4",
+        "name": "Michael Caine",
+        "birth_date": "March 14, 1933"
+    },
+    {
+        "id": "actor_5",
+        "name": "Robert De Niro",
+        "birth_date": "August 17, 1943"
+    },
+    {
+        "id": "actor_6",
+        "name": "Matt Damon",
+        "birth_date": "October 8, 1970"
+    }
+]

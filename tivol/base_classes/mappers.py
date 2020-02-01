@@ -1,6 +1,9 @@
+import json
 from abc import ABC
 import csv
 import yaml
+from glob import glob
+from os import path
 
 
 class BaseMapper(ABC):
@@ -51,9 +54,11 @@ class BaseMapper(ABC):
         Processing the data from the source data.
         """
         if self.source_type is 'file':
+            # Go over a single file.
             with open(self.source_path) as file:
                 return self.process_single(file)
-        else:
+
+        if self.source_type is 'folder':
             raise NotImplemented('Process multiple files not implemented yet')
 
     def process_single(self, file):
@@ -98,7 +103,8 @@ class YamlMapper(BaseMapper):
 
 
 class JsonMapper(BaseMapper):
-    pass
+    def process_single(self, file):
+        return json.load(file)
 
 
 class ExcelMapper(BaseMapper):
