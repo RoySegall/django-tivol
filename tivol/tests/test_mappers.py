@@ -1,13 +1,56 @@
-from django.test import TestCase
+from django.db import models, connection
+from django.db.models import CharField
+from django.test import TestCase, TransactionTestCase
+from tivol.base_classes.mappers import SqlMapper
 from tivol.base_classes.mappers import CsvMapper, YamlMapper, JsonMapper
 from tivol.tests.assets.mappers_for_tests import DummyMapper
 import os
 
 
-class TestMappers(TestCase):
+class OldTag(models.Model):
+    """
+    Dummy model. Don't mind this one.
+    """
+    title = CharField(max_length=255)
+    description = CharField(max_length=255)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        # This model is not managed by Django
+        managed = False
+
+
+class TestMappers(TransactionTestCase):
     """
     Testing mappers.
     """
+
+    def setUp(self):
+        """
+        Creating all the custom schema which relate to test.
+        """
+        super().setUp()
+        with connection.schema_editor() as schema_editor:
+            schema_editor.create_model(OldTag)
+
+        old_tags = [
+            OldTag(title="Krabby Patty", description="yummy"),
+            OldTag(title="Omelette du Fromage", description="yummy"),
+            OldTag(title="Chipackerz", description="yummy")
+        ]
+
+        OldTag.objects.bulk_create(old_tags)
+
+    def tearDown(self):
+        """
+        Deleting all the custom schema which relate to test.
+        """
+        super().tearDown()
+
+        with connection.schema_editor() as schema_editor:
+            schema_editor.delete_model(OldTag)
 
     def test_set_destination_file(self):
         """
@@ -94,7 +137,16 @@ class TestMappers(TestCase):
 
     def test_sql_parser(self):
         """
-        Testing the SQL parser.
+        Testing the SQL parser. Mocking the db layer was a bit hard so I
+        manage to bypass it by the next logic: I'm creating another model, old
+        tags, and the SQL process will query that table. After that is plain
+        old assertEqual.
         """
-        # todo: check how to mock the SQL layer fnctionnallity.
-        self.fail('Not ready yet. ')
+
+        mapper = SqlMapper()
+        mapper.set_connection('default')
+        mapper.set_table(OldTag._meta.db_table)
+        process = mapper.process()
+
+        first_row = {'id': 1, 'title': 'Krabby Patty', 'description': 'yummy'}
+        self.assertEqual(first_row, process[0])

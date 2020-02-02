@@ -2,7 +2,7 @@ import json
 from abc import ABC
 import csv
 import yaml
-from django.db import connection, connections
+from django.db import connections
 from tivol.Assertions.assertions import OtherConnectionNotSet, \
     SourceTableNotSet
 
