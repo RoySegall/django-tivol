@@ -3,10 +3,8 @@ from tivol.Assertions.assertions import NoModelTarget
 from tivol.base_classes.mappers import CsvMapper
 from tivol.base_classes.plugins import UppercasePlugin
 from tivol.tests.assets.migration_handlers import AnimalMigration
-from django.db import connection
-
-from django.db import models
-from django.db.models import CharField, IntegerField, DateTimeField
+from django.db import connection, models
+from django.db.models import CharField, IntegerField
 
 
 class Animal(models.Model):

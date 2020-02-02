@@ -215,6 +215,50 @@ The plugin is pretty easy to understand - the `value` argument is the
 value from the source file and the `extra_info` argument represent a
 list of values, such as the format date.
 
+### Database migration
+
+We can pull data from other databases. For now, MySQL but more will be
+available in the future. Migrations which relies on data from files are
+pretty easy to set up - tell the mapper where the file store and the
+mapper will do the heavy lifting. But how data from other databases can
+be migrated easily without a lot of hustle? Well, Django already has a
+nice DB layer which we can use. Let's see how this will work.
+
+First, we need set the DB connection. In your `settings.py`, or
+`local_settings.py`, you'll need to add connections to the DB. Django's
+documentation has a lot of information for that but you can have a look
+on the next example:
+
+```
+DATABASES = {
+    'default': {
+        # ...
+    },
+    'other_site': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'django_migration',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    }
+}
+```
+
+After we set up the connection, let's see how to connect the mapper. In
+the `init_metadata` method we need to configure the mapper like this:
+
+```pyton
+        mysql_mapper = SqlMapper()
+        mysql_mapper.set_connection('other_site')
+        mysql_mapper.set_table('tags')
+```
+
+Those three lines did a lot for us: initialised the `SqlMapper`
+instance. The `mysql_mapper.set_connection('other_site')` told to the
+mapper which connection to use and the `mysql_mapper.set_table('tags')`
+told the mapper from which table in another DB we need to pull the DB.
+
 #### Migration life cycle hooks
 TBD
 
