@@ -1,7 +1,8 @@
 from django.db import models, connection
 from django.db.models import CharField
 from django.test import TransactionTestCase
-from tivol.base_classes.mappers import CsvMapper, YamlMapper, JsonMapper, SqlMapper, RestMapper
+from tivol.base_classes.mappers import CsvMapper, YamlMapper, JsonMapper, \
+    SqlMapper, RestMapper
 from tivol.tests.assets.mappers_for_tests import DummyMapper
 from tivol.Assertions.assertions import RequestAddressNotSet, RestRequestFailed
 from unittest import mock
@@ -21,7 +22,7 @@ def request_get(address):
     mocked.status_code = responses[0]['status_code']
     mocked.json.return_value = responses[0]['return_value']
 
-    # Pop the first one so for the next one we'll return the next mock request in the line.
+    # Pop the response we used from the array of results.
     responses.pop(0)
 
     # And... retuning the dummy response. Dah!
