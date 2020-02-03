@@ -20,3 +20,11 @@ class OtherConnectionNotSet(Exception):
 
 class SourceTableNotSet(Exception):
     pass
+
+
+class RestRequestFailed(Exception):
+    pass
+
+
+class RequestAddressNotSet(Exception):
+    pass
