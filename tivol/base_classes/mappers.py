@@ -4,7 +4,9 @@ import csv
 import yaml
 from django.db import connections
 from tivol.Assertions.assertions import OtherConnectionNotSet, \
-    SourceTableNotSet
+    SourceTableNotSet, RestRequestFailed, RequestAddressNotSet
+import requests
+from requests import status_codes
 
 
 class BaseMapper(ABC):
@@ -156,7 +158,33 @@ class SqlMapper(BaseMapper):
 
 
 class RestMapper(BaseMapper):
-    pass
+
+    address = ''
+
+    def __init__(self):
+        super().__init__()
+        self.address = ''
+
+    def set_address(self, address):
+        """
+        Setting the address
+
+        :param address: The address to pull data from.
+        """
+        self.address = address
+
+    def process(self):
+
+        if not self.address:
+            raise RequestAddressNotSet()
+
+        response = requests.get(self.address)
+
+        if response.status_code != status_codes.codes.ALL_OK:
+            raise RestRequestFailed()
+
+        # Return the response.
+        return response.json()
 
 
 class GraphqlMapper(BaseMapper):

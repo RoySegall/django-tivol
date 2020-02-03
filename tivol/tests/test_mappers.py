@@ -1,10 +1,32 @@
 from django.db import models, connection
 from django.db.models import CharField
-from django.test import TestCase, TransactionTestCase
-from tivol.base_classes.mappers import SqlMapper
-from tivol.base_classes.mappers import CsvMapper, YamlMapper, JsonMapper
+from django.test import TransactionTestCase
+from tivol.base_classes.mappers import CsvMapper, YamlMapper, JsonMapper, \
+    SqlMapper, RestMapper
 from tivol.tests.assets.mappers_for_tests import DummyMapper
+from tivol.Assertions.assertions import RequestAddressNotSet, RestRequestFailed
+from unittest import mock
 import os
+
+# Keep a list of responses for the mock.
+responses = [
+    {"status_code": 400, "return_value": {}},
+    {"status_code": 200, "return_value": {"name": "pizza"}}
+]
+
+
+def request_get(address):
+    mocked = mock.Mock()
+
+    # Set the mock object we intent to return.
+    mocked.status_code = responses[0]['status_code']
+    mocked.json.return_value = responses[0]['return_value']
+
+    # Pop the response we used from the array of results.
+    responses.pop(0)
+
+    # And... retuning the dummy response. Dah!
+    return mocked
 
 
 class OldTag(models.Model):
@@ -150,3 +172,27 @@ class TestMappers(TransactionTestCase):
 
         first_row = {'id': 1, 'title': 'Krabby Patty', 'description': 'yummy'}
         self.assertEqual(first_row, process[0])
+
+    @mock.patch('tivol.base_classes.mappers.requests.get', new=request_get)
+    def test_rest_parser(self):
+        """
+        Verify we got the expected results when creating a REST requests.
+        """
+        mapper = RestMapper()
+        try:
+            mapper.process()
+            self.fail()
+        except RequestAddressNotSet as e:
+            pass
+
+        mapper.set_address('http://example.com')
+
+        # verify we fail for the first time.
+        try:
+            mapper.process()
+            self.fail()
+        except RestRequestFailed as e:
+            pass
+
+        # Create another request and make sure we got the correct values.
+        self.assertEqual({"name": "pizza"}, mapper.process())
