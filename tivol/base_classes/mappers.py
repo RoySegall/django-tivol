@@ -185,7 +185,3 @@ class RestMapper(BaseMapper):
 
         # Return the response.
         return response.json()
-
-
-class GraphqlMapper(BaseMapper):
-    pass
