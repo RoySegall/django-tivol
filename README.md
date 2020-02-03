@@ -1,6 +1,6 @@
 # Tivol
 
-[![Build Status](https://travis-ci.org/RoySegall/tivol.svg?branch=master)](https://travis-ci.org/RoySegall/tivol)
+[![Build Status](https://travis-ci.org/RoySegall/django-tivol.svg?branch=master)](https://travis-ci.org/RoySegall/django-tivol)
 
 Welcome to `Tivol`. You probably wonder to your self "what's this Django
 app do?". Let's start with a scenario: you created your Django site, or
