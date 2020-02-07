@@ -19,3 +19,11 @@ before_script:
 
 script:
   - bash $SCRIPT
+
+deploy:
+  provider: pypi
+  user: "__token__"
+  password:
+    secure: $token
+    on:
+      tags: true
