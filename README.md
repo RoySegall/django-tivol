@@ -240,9 +240,18 @@ movie_5,Transformers,director_1
 movie_5,Transformers 2: Revenge of the Fallen,director_1
 ```
 
-Tivol keeps track of the ID from the source files, CSV, JSON or DB records, and 
-know what is the ID of the record in the DB after the migration process 
-completed.  
+The next part is to set the reference plugin like this:
+
+```python
+self.fields_plugins = {
+    'director': [{'plugin': ReferencePlugin, 'extra_info': {'model': Director}}],
+}
+```
+
+How the magic works? Tivol keeps track of the ID from the source files, 
+CSV, JSON or DB records, and know what is the ID of the record in the DB after 
+the migration process completed. The reference plugin returns the object as 
+Django's ORM expect it to be.
 
 #### Migration life cycle hooks
 TBD
