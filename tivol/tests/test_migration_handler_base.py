@@ -89,3 +89,9 @@ class TestMigrationHandlerBase(TransactionTestCase):
         self.migration.migrate()
         self.assertEqual(7, Animal.objects.count())
         Animal.objects.get(animal_name='Cat')
+
+    def test_content_migrate_with_reference(self):
+        """
+        Testing migration when a migration depends on another migration.
+        """
+        pass
