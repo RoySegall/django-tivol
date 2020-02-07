@@ -46,12 +46,12 @@ class ReferencePlugin(PluginBase):
     on two CSV files:
 
     directors.csv:
-        id, name
+        id,name
         director_1,Michael Benjamin Bay
         director_2,Martin Scorsese
 
     Now, how should movies.csv look like? like that:
-        id, name, director
+        id,name,director
         movie_1,The Wolf of Wall Street,director_2
         movie_2,The Wolf of Wall Street,director_2
         movie_3,The Departed,director_2
@@ -75,7 +75,8 @@ class ReferencePlugin(PluginBase):
         # target just in case there are two different models with the same
         # ID from the source file - a tag model object and an actor model
         # object which their source ID is "record_1" or something like this.
-        ContentMigrationStatus.objects.get(
+        results = ContentMigrationStatus.objects.get(
             source_id=value, model_target=get_destination_from_model(model)
-        ).first()
-        return 1
+        )
+
+        return model.objects.get(id=results.destination_id)
