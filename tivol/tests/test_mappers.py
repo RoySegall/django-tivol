@@ -41,7 +41,7 @@ class OldTag(models.Model):
         return self.title
 
     class Meta:
-        # This model is not managed by Django
+        # This model is not managed by Django.
         managed = False
 
 

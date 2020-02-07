@@ -78,6 +78,9 @@ class TestMigrationHandlerBase(TransactionTestCase):
             self.assertEqual(str(e), 'Raising so we could catch it')
 
     def test_migrate(self):
+        """
+        Testing migration into the DB.
+        """
         self.assertEqual(0, Animal.objects.count())
         try:
             self.migration.migrate()

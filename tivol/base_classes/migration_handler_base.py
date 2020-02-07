@@ -8,6 +8,10 @@ from tivol.models import ContentMigrationStatus
 
 
 def get_destination_from_model(model):
+    """
+    Getting the label of the model. Used for making sure we won't create
+    duplicates of migrations.
+    """
     return model._meta.label_lower
 
 
