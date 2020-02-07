@@ -4,7 +4,8 @@ from django.test import TransactionTestCase
 from tivol.base_classes.mappers import CsvMapper, YamlMapper, JsonMapper, \
     SqlMapper, RestMapper
 from tivol.tests.assets.mappers_for_tests import DummyMapper
-from tivol.Assertions.assertions import RequestAddressNotSet, RestRequestFailed
+from tivol.base_classes.assertions import RequestAddressNotSet, \
+    RestRequestFailed
 from unittest import mock
 import os
 
@@ -113,7 +114,7 @@ class TestMappers(TransactionTestCase):
         mapper.set_destination_file(path=path)
 
         processed = mapper.process()
-        if key is 0:
+        if key == 0:
             return processed[0]
         return processed
 

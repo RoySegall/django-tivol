@@ -1,7 +1,7 @@
 from abc import ABC
 from django.db.models import Model
 
-from tivol.Assertions.assertions import NoModelTarget
+from tivol.base_classes.assertions import NoModelTarget
 from tivol.base_classes.mappers import BaseMapper
 from tivol.management.helpers import SwagHelpers
 from tivol.models import ContentMigrationStatus

@@ -3,7 +3,7 @@ from abc import ABC
 import csv
 import yaml
 from django.db import connections
-from tivol.Assertions.assertions import OtherConnectionNotSet, \
+from tivol.base_classes.assertions import OtherConnectionNotSet, \
     SourceTableNotSet, RestRequestFailed, RequestAddressNotSet
 import requests
 from requests import status_codes
@@ -56,12 +56,12 @@ class BaseMapper(ABC):
         """
         Processing the data from the source data.
         """
-        if self.source_type is 'file':
+        if self.source_type == 'file':
             # Go over a single file.
             with open(self.source_path) as file:
                 return self.process_single(file)
 
-        if self.source_type is 'folder':
+        if self.source_type == 'folder':
             raise NotImplemented('Process multiple files not implemented yet')
 
     def process_single(self, file):

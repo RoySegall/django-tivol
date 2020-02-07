@@ -1,5 +1,5 @@
 from django.test import TransactionTestCase
-from tivol.Assertions.assertions import NoModelTarget
+from tivol.base_classes.assertions import NoModelTarget
 from tivol.base_classes.mappers import CsvMapper
 from tivol.base_classes.plugins import UppercasePlugin
 from tivol.tests.assets.migration_handlers import AnimalMigration

@@ -1,4 +1,4 @@
-from tivol.Assertions.assertions import MigrationsNotRegistered
+from tivol.base_classes.assertions import MigrationsNotRegistered
 from tivol.base_classes.migration_handler_base import MigrationHandlerBase
 from typing import List
 

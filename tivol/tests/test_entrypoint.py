@@ -1,5 +1,5 @@
 from django.test.testcases import TestCase
-from tivol.Assertions.assertions import MigrationsNotRegistered
+from tivol.base_classes.assertions import MigrationsNotRegistered
 from tivol.tests.assets.entrypoint_for_tests import FailingEntryPointForTests,\
     EntryPointForTests
 from tivol.tests.assets.migration_handlers import AnimalMigration
