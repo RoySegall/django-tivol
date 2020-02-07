@@ -1,6 +1,7 @@
 from django.conf import settings
 from pydoc import locate
-from tivol.Assertions.assertions import NotEntryPointClass, EntryPointIsMissing
+from tivol.base_classes.assertions import NotEntryPointClass, \
+    EntryPointIsMissing
 from tivol.base_classes import entry_point
 from clikit.io import ConsoleIO
 from clikit.ui.components import ProgressBar, Question, ConfirmationQuestion, \

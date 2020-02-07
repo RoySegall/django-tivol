@@ -1,5 +1,5 @@
 from django.test import TransactionTestCase
-from tivol.Assertions.assertions import NoModelTarget
+from tivol.base_classes.assertions import NoModelTarget
 from tivol.base_classes.mappers import CsvMapper
 from tivol.base_classes.plugins import UppercasePlugin
 from tivol.tests.assets.migration_handlers import AnimalMigration
@@ -78,6 +78,9 @@ class TestMigrationHandlerBase(TransactionTestCase):
             self.assertEqual(str(e), 'Raising so we could catch it')
 
     def test_migrate(self):
+        """
+        Testing migration into the DB.
+        """
         self.assertEqual(0, Animal.objects.count())
         try:
             self.migration.migrate()

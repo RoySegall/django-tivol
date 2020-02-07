@@ -1,13 +1,17 @@
 from abc import ABC
 from django.db.models import Model
 
-from tivol.Assertions.assertions import NoModelTarget
+from tivol.base_classes.assertions import NoModelTarget
 from tivol.base_classes.mappers import BaseMapper
 from tivol.management.helpers import SwagHelpers
 from tivol.models import ContentMigrationStatus
 
 
 def get_destination_from_model(model):
+    """
+    Getting the label of the model. Used for making sure we won't create
+    duplicates of migrations.
+    """
     return model._meta.label_lower
 
 

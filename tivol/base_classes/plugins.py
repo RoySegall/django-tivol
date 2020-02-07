@@ -1,7 +1,7 @@
 from datetime import datetime
 from tivol.base_classes.migration_handler_base import \
     get_destination_from_model
-from tivol.Assertions.assertions import NoModelTarget
+from tivol.base_classes.assertions import NoModelTarget
 from tivol.models import ContentMigrationStatus
 
 
