@@ -7,6 +7,10 @@ from tivol.management.helpers import SwagHelpers
 from tivol.models import ContentMigrationStatus
 
 
+def get_destination_from_model(model):
+    return model._meta.label_lower
+
+
 class MigrationHandlerBase(ABC):
     """
     Base migration class.
@@ -92,7 +96,7 @@ class MigrationHandlerBase(ABC):
         if not self.model_target:
             raise NoModelTarget()
 
-        model_label = self.model_target._meta.label_lower
+        model_label = get_destination_from_model(self.model_target)
         created_items = 0
         skipped = 0
         for result in results:

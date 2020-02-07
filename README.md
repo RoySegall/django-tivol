@@ -1,6 +1,6 @@
 # Tivol
 
-[![Build Status](https://travis-ci.org/RoySegall/tivol.svg?branch=master)](https://travis-ci.org/RoySegall/tivol)
+[![Build Status](https://travis-ci.org/RoySegall/django-tivol.svg?branch=master)](https://travis-ci.org/RoySegall/django-tivol)
 
 Welcome to `Tivol`. You probably wonder to your self "what's this Django
 app do?". Let's start with a scenario: you created your Django site, or
@@ -215,6 +215,47 @@ The plugin is pretty easy to understand - the `value` argument is the
 value from the source file and the `extra_info` argument represent a
 list of values, such as the format date.
 
+#### Reference basing on migrated records
+For example, we need to migrate directors and movies. We also need to keep a 
+relationship between a movie and the director of that movie. Let's look on two 
+CSV files:
+
+directors.csv:
+
+```csv
+id,name
+director_1,Michael Benjamin Bay
+director_2,Martin Scorsese
+```
+
+Now, how should movies.csv look like? like that:
+
+```csv
+id,name,director
+movie_1,The Wolf of Wall Street,director_2
+movie_2,The Wolf of Wall Street,director_2
+movie_3,The Departed,director_2
+movie_4,Pearl Harbor,director_1
+movie_5,Transformers,director_1
+movie_5,Transformers 2: Revenge of the Fallen,director_1
+```
+
+The next part is to set the reference plugin like this:
+
+```python
+self.fields_plugins = {
+    'director': [{'plugin': ReferencePlugin, 'extra_info': {'model': Director}}],
+}
+```
+
+How the magic works? Tivol keeps track of the ID from the source files, 
+CSV, JSON or DB records, and know what is the ID of the record in the DB after 
+the migration process completed. The reference plugin returns the object as 
+Django's ORM expect it to be.
+
+#### Migration life cycle hooks
+TBD
+
 ### Database migration
 
 We can pull data from other databases. For now, MySQL but more will be
@@ -258,9 +299,6 @@ Those three lines did a lot for us: initialised the `SqlMapper`
 instance. The `mysql_mapper.set_connection('other_site')` told to the
 mapper which connection to use and the `mysql_mapper.set_table('tags')`
 told the mapper from which table in another DB we need to pull the DB.
-
-#### Migration life cycle hooks
-TBD
 
 ## Tivol CLI commands
 Let's go over some CLI commands we get out of the box:
