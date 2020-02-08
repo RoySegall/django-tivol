@@ -12,6 +12,12 @@ setup(
     version='0.0.1',
     description=u"Migrating (dummy) content into a Django site",
     long_description=long_description,
+    long_description_content_type="text/markdown",
+    install_requires=[
+        'PyYAML==5.3',
+        'clikit==0.4.1',
+        'requests==2.22.0',
+    ],
     classifiers=[],
     keywords='',
     author=u"Roy Segall",
