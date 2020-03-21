@@ -2,6 +2,7 @@ id,animal_name,sound,number_of_legs
 animal_1,Cat,Meow,4
 animal_2,Dog,Woff,4
 animal_3,Fish,Blop,0
+
 animal_4,Chicken,Paka,2
 animal_5,Snake,ssssss,0
 animal_6,Octipus,Prrfff,8

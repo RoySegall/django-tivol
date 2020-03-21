@@ -105,6 +105,10 @@ class MigrationHandlerBase(ABC):
         skipped = 0
         for result in results:
 
+            if len(result.keys()) == 0:
+                # Might be an empty row. Skip this one.
+                continue
+
             # Go over the rows and check if we need to process the value.
             if self.fields_plugins.keys():
 
