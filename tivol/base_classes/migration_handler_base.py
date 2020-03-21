@@ -1,6 +1,6 @@
 from abc import ABC
+from base_classes.hooks import Lifecycle
 from django.db.models import Model
-
 from tivol.base_classes.assertions import NoModelTarget
 from tivol.base_classes.mappers import BaseMapper
 from tivol.management.helpers import SwagHelpers
@@ -15,7 +15,7 @@ def get_destination_from_model(model):
     return model._meta.label_lower
 
 
-class MigrationHandlerBase(ABC):
+class MigrationHandlerBase(ABC, Lifecycle):
     """
     Base migration class.
     """
