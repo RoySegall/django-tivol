@@ -2,8 +2,8 @@ import json
 from abc import ABC
 import csv
 import yaml
-from base_classes.hooks import Lifecycle
 from django.db import connections
+from tivol.base_classes.hooks import Lifecycle
 from tivol.base_classes.assertions import OtherConnectionNotSet, \
     SourceTableNotSet, RestRequestFailed, RequestAddressNotSet
 import requests

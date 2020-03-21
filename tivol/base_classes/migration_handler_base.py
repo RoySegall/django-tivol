@@ -1,6 +1,6 @@
 from abc import ABC
-from base_classes.hooks import Lifecycle
 from django.db.models import Model
+from tivol.base_classes.hooks import Lifecycle
 from tivol.base_classes.assertions import NoModelTarget
 from tivol.base_classes.mappers import BaseMapper
 from tivol.management.helpers import SwagHelpers
