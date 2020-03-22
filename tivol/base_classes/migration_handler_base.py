@@ -1,6 +1,6 @@
 from abc import ABC
 from django.db.models import Model
-
+from tivol.base_classes.hooks import Lifecycle
 from tivol.base_classes.assertions import NoModelTarget
 from tivol.base_classes.mappers import BaseMapper
 from tivol.management.helpers import SwagHelpers
@@ -15,7 +15,7 @@ def get_destination_from_model(model):
     return model._meta.label_lower
 
 
-class MigrationHandlerBase(ABC):
+class MigrationHandlerBase(ABC, Lifecycle):
     """
     Base migration class.
     """
@@ -95,7 +95,9 @@ class MigrationHandlerBase(ABC):
         Migrating the parsed data into the DB using Django's ORM.
         """
         # Processing the sources.
+        self.pre_action('process_files', migration_class=self)
         results = self.source_mapper.process()
+        self.post_action('process_files', files=results)
 
         if not self.model_target:
             raise NoModelTarget()
@@ -130,7 +132,14 @@ class MigrationHandlerBase(ABC):
                 skipped = skipped + 1
                 continue
 
+            self.pre_action(
+                'insert_record', properties=result, model=self.model_target
+            )
             entry = self.model_target.objects.create(**result)
+            self.post_action(
+                'insert_record', properties=result, model=self.model_target
+            )
+
             ContentMigrationStatus.objects.create(
                 source_id=source_id,
                 destination_id=entry.id,
