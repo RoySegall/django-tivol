@@ -98,6 +98,8 @@ class TestMigrationHandlerBase(TransactionTestCase):
         Testing the hooks.
         """
         self.assertFalse(self.migration.hook_pre_process_files_called)
+        self.assertFalse(self.migration.hook_post_process_files_called)
         self.migration.set_model_target(Animal)
         self.migration.migrate()
         self.assertTrue(self.migration.hook_pre_process_files_called)
+        self.assertTrue(self.migration.hook_post_process_files_called)
