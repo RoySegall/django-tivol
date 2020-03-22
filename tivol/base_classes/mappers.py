@@ -60,7 +60,10 @@ class BaseMapper(ABC, Lifecycle):
         if self.source_type == 'file':
             # Go over a single file.
             with open(self.source_path) as file:
-                return self.process_single(file)
+                self.pre_action('processing_file', file=file)
+                results = self.process_single(file)
+                self.post_action('processing_file', results=results)
+                return results
 
         if self.source_type == 'folder':
             raise NotImplemented('Process multiple files not implemented yet')

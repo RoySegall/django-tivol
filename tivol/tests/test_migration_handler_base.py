@@ -103,8 +103,13 @@ class TestMigrationHandlerBase(TransactionTestCase):
         self.assertFalse(self.migration.hook_pre_insert_record_called)
         self.assertFalse(self.migration.hook_post_insert_record_called)
 
+        source_mapper = self.migration.source_mapper
+        self.assertFalse(source_mapper.hook_pre_processing_file)
+        self.assertFalse(source_mapper.hook_post_processing_file)
         self.migration.set_model_target(Animal)
         self.migration.migrate()
+        self.assertTrue(source_mapper.hook_post_processing_file)
+        self.assertTrue(source_mapper.hook_pre_processing_file)
 
         self.assertTrue(self.migration.hook_pre_process_files_called)
         self.assertTrue(self.migration.hook_post_process_files_called)

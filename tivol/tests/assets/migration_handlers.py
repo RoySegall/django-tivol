@@ -3,6 +3,20 @@ from tivol.base_classes.migration_handler_base import MigrationHandlerBase
 import os
 
 
+class CsvMapperTests(CsvMapper):
+
+    def __init__(self):
+        super().__init__()
+        self.hook_pre_processing_file = False
+        self.hook_post_processing_file = False
+
+    def hook_pre_processing_file(self, file):
+        self.hook_pre_processing_file = True
+
+    def hook_post_processing_file(self, results):
+        self.hook_post_processing_file = True
+
+
 class AnimalMigration(MigrationHandlerBase):
 
     def __init__(self):
@@ -13,7 +27,7 @@ class AnimalMigration(MigrationHandlerBase):
         self.hook_post_insert_record_called = False
 
     def init_metadata(self):
-        csv_mapper = CsvMapper()
+        csv_mapper = CsvMapperTests()
         path = os.path.join(
             os.getcwd(), 'tivol', 'tests', 'assets', 'animals.csv'
         )
