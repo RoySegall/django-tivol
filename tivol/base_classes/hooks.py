@@ -1,3 +1,4 @@
+import inspect
 class Lifecycle:
     """
     This class holds a lifecycle hook.
@@ -34,9 +35,17 @@ class Lifecycle:
     def pre_action(self, event, **kwargs):
         # Check if there is method with the name hook_pre_event and trigger
         # it.
-        pass
+        method_name = f'hook_pre_{event}'
+        if hasattr(self, method_name):
+            if inspect.ismethod(getattr(self, method_name)):
+                reference = getattr(self, method_name)
+                reference(**kwargs)
 
-    def post_action(self, event,  **kwargs):
+    def post_action(self, event, **kwargs):
         # Check if there is method with the name hook_post_event and trigger
         # it.
-        pass
+        method_name = f'hook_post_{event}'
+        if hasattr(self, method_name):
+            if inspect.ismethod(getattr(self, method_name)):
+                reference = getattr(self, method_name)
+                reference(**kwargs)

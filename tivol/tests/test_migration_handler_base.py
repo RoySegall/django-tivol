@@ -92,3 +92,12 @@ class TestMigrationHandlerBase(TransactionTestCase):
         self.migration.migrate()
         self.assertEqual(7, Animal.objects.count())
         Animal.objects.get(animal_name='Cat')
+
+    def test_hooks(self):
+        """
+        Testing the hooks.
+        """
+        self.assertFalse(self.migration.hook_pre_process_files_called)
+        self.migration.set_model_target(Animal)
+        self.migration.migrate()
+        self.assertTrue(self.migration.hook_pre_process_files_called)

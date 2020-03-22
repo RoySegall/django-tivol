@@ -95,7 +95,9 @@ class MigrationHandlerBase(ABC, Lifecycle):
         Migrating the parsed data into the DB using Django's ORM.
         """
         # Processing the sources.
+        self.pre_action('process_files')
         results = self.source_mapper.process()
+        self.post_action('process_files', files='foo')
 
         if not self.model_target:
             raise NoModelTarget()

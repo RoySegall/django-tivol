@@ -5,6 +5,10 @@ import os
 
 class AnimalMigration(MigrationHandlerBase):
 
+    def __init__(self):
+        super().__init__()
+        self.hook_pre_process_files_called = False
+
     def init_metadata(self):
         csv_mapper = CsvMapper()
         path = os.path.join(
@@ -16,3 +20,9 @@ class AnimalMigration(MigrationHandlerBase):
         self.name = 'Animal migration'
         self.description = 'Migrating animals into the system'
         self.add_source_mapper(csv_mapper)
+
+    # def hook_pre_process_files(self, processor):
+    #     print(processor)
+
+    def hook_pre_process_files(self, files=None):
+        self.hook_pre_process_files_called = True
