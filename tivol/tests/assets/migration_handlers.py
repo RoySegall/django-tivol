@@ -9,6 +9,8 @@ class AnimalMigration(MigrationHandlerBase):
         super().__init__()
         self.hook_pre_process_files_called = False
         self.hook_post_process_files_called = False
+        self.hook_pre_insert_record_called = False
+        self.hook_post_insert_record_called = False
 
     def init_metadata(self):
         csv_mapper = CsvMapper()
@@ -27,4 +29,9 @@ class AnimalMigration(MigrationHandlerBase):
 
     def hook_post_process_files(self, files):
         self.hook_post_process_files_called = True
-        pass
+
+    def hook_pre_insert_record(self, properties, model):
+        self.hook_pre_insert_record_called = True
+
+    def hook_post_insert_record(self, properties, model):
+        self.hook_post_insert_record_called = True

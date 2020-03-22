@@ -132,7 +132,14 @@ class MigrationHandlerBase(ABC, Lifecycle):
                 skipped = skipped + 1
                 continue
 
+            self.pre_action(
+                'insert_record', properties=result, model=self.model_target
+            )
             entry = self.model_target.objects.create(**result)
+            self.post_action(
+                'insert_record', properties=result, model=self.model_target
+            )
+
             ContentMigrationStatus.objects.create(
                 source_id=source_id,
                 destination_id=entry.id,
